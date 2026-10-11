@@ -1,0 +1,31 @@
+# Binarios
+/bin/
+/chop
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Tests y cobertura
+*.test
+*.out
+coverage.html
+
+# Workspaces de Go
+go.work
+go.work.sum
+
+# Variables de entorno
+.env
+.env.*
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*~
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
