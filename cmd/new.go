@@ -1,12 +1,13 @@
 package cmd
 
 import (
+	"chop/internal/render"
+	"chop/internal/store"
 	"errors"
 	"fmt"
 	"strings"
 
 	"github.com/charmbracelet/huh"
-	"github.com/charmbracelet/lipgloss"
 	"github.com/spf13/cobra"
 )
 
@@ -14,13 +15,6 @@ var (
 	newColor   string
 	newOrdered bool
 )
-
-var colors = []string{"red", "green", "blue", "purple", "orange", "white"}
-
-var colorCodes = map[string]string{
-	"red": "9", "green": "10", "blue": "12",
-	"purple": "13", "orange": "208", "white": "15",
-}
 
 // Initialize the new command and its flags
 func init() {
@@ -47,27 +41,34 @@ var newCmd = &cobra.Command{
 		if errors.Is(err, huh.ErrUserAborted) {
 			return nil
 		}
-
-		if !ValidateColor(newColor) {
-			return fmt.Errorf("invalid color %q (valid: %s)", newColor, strings.Join(colors, ", "))
+		if err != nil {
+			return fmt.Errorf("running form: %w", err)
 		}
 
-		fmt.Printf("name=%s color=%s ordered=%t\n", name, newColor, newOrdered)
+		if !render.Valid(newColor) {
+			return fmt.Errorf("invalid color %q (valid: %s)", newColor, strings.Join(render.Names(), ", "))
+		}
+
+		// Here you would typically call the function to create the new Chop in the store.
+		// For example:
+		err = db.CreateChop(name, newColor, newOrdered)
+		if errors.Is(err, store.ErrAlreadyExists) {
+			return fmt.Errorf("chop %q already exists", name)
+		}
+		if err != nil {
+			return fmt.Errorf("creating chop: %w", err)
+		}
 		return nil
 	},
 }
 
 func colorOptions() []huh.Option[string] {
-	opts := make([]huh.Option[string], 0, len(colors))
-	for _, c := range colors {
-		label := lipgloss.NewStyle().
-			Foreground(lipgloss.Color(colorCodes[c])).
-			Render(c)
-		opts = append(opts, huh.NewOption(label, c))
+	opts := make([]huh.Option[string], 0, len(render.Colors))
+	for _, c := range render.Colors {
+		opts = append(opts, huh.NewOption(render.Paint(c.Name, c.Name), c.Name))
 	}
 	return opts
 }
-
 func formBoth(color *string, ordered *bool) error {
 	form := huh.NewForm(
 		huh.NewGroup(
@@ -99,7 +100,7 @@ func formColor(color *string) error {
 }
 
 func ValidateColor(color string) bool {
-	for _, c := range colors {
+	for _, c := range render.Names() {
 		if c == color {
 			return true
 		}
