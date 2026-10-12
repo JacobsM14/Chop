@@ -1,4 +1,4 @@
-module chop
+module github.com/JacobsM14/chop
 
 go 1.27.2
 

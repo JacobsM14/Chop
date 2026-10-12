@@ -1,6 +1,6 @@
 package main
 
-import "chop/cmd"
+import "github.com/JacobsM14/chop/cmd"
 
 func main() {
 	cmd.Execute()

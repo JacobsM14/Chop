@@ -1,11 +1,11 @@
 package cmd
 
 import (
-	"chop/internal/store"
 	"errors"
 	"fmt"
 	"strings"
 
+	"github.com/JacobsM14/chop/internal/store"
 	"github.com/charmbracelet/huh"
 	"github.com/spf13/cobra"
 )
@@ -15,9 +15,10 @@ func init() {
 }
 
 var addCmd = &cobra.Command{
-	Use:   "add <name>",
-	Short: "Add a new item",
-	Args:  cobra.ExactArgs(1),
+	Use:               "add <name>",
+	Short:             "Add a new item",
+	Args:              cobra.ExactArgs(1),
+	ValidArgsFunction: completeChopNames,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		chopName := args[0]
 		item, err := askItem()

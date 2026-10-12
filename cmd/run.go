@@ -7,10 +7,9 @@ import (
 	"os/signal"
 	"strings"
 
-	"chop/internal/render"
-	"chop/internal/runner"
-	"chop/internal/store"
-
+	"github.com/JacobsM14/chop/internal/render"
+	"github.com/JacobsM14/chop/internal/runner"
+	"github.com/JacobsM14/chop/internal/store"
 	"github.com/charmbracelet/huh"
 	"github.com/spf13/cobra"
 )
@@ -27,13 +26,15 @@ func init() {
 	runCmd.Flags().BoolVar(&runDryRun, "dry-run", false, "print the commands without running them")
 	runCmd.Flags().BoolVar(&runContinue, "continue", false, "keep going if a command fails")
 	runCmd.Flags().BoolVarP(&runYes, "yes", "y", false, "skip confirmation")
+	cobra.CheckErr(runCmd.RegisterFlagCompletionFunc("item", completeItemNumbers))
 	rootCmd.AddCommand(runCmd)
 }
 
 var runCmd = &cobra.Command{
-	Use:   "run <name>",
-	Short: "Run the commands of a Chop in order",
-	Args:  cobra.ExactArgs(1),
+	Use:               "run <name>",
+	Short:             "Run the commands of a Chop in order",
+	Args:              cobra.ExactArgs(1),
+	ValidArgsFunction: completeChopNames,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		name := args[0]
 

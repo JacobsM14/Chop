@@ -4,9 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"chop/internal/render"
-	"chop/internal/store"
-
+	"github.com/JacobsM14/chop/internal/render"
+	"github.com/JacobsM14/chop/internal/store"
 	"github.com/spf13/cobra"
 )
 
@@ -15,10 +14,11 @@ func init() {
 }
 
 var getCmd = &cobra.Command{
-	Use:     "get <name>",
-	Aliases: []string{"ver"},
-	Short:   "Show a Chop and its items",
-	Args:    cobra.ExactArgs(1),
+	Use:               "get <name>",
+	Aliases:           []string{"ver"},
+	Short:             "Show a Chop and its items",
+	Args:              cobra.ExactArgs(1),
+	ValidArgsFunction: completeChopNames,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		chop, err := db.Get(args[0])
 		if errors.Is(err, store.ErrNotFound) {

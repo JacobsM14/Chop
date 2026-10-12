@@ -19,6 +19,12 @@ No hace falta CGO: el driver de SQLite ([modernc.org/sqlite](https://pkg.go.dev/
 ## Instalación
 
 ```sh
+go install github.com/JacobsM14/chop@latest
+```
+
+O clona el repositorio e instala con `make`:
+
+```sh
 git clone <url-del-repo> chop
 cd chop
 make install   # instala el binario en $GOBIN o $GOPATH/bin
@@ -143,6 +149,22 @@ CHOP_DB=/tmp/pruebas.db chop ls
 ```
 
 Es útil para probar sin tocar tus chops reales.
+
+## Autocompletado
+
+`chop completion <shell>` genera el script de autocompletado. Para cargarlo en
+cada sesión, añade a tu configuración de shell:
+
+```sh
+source <(chop completion zsh)    # ~/.zshrc
+source <(chop completion bash)   # ~/.bashrc
+chop completion fish | source    # ~/.config/fish/config.fish
+```
+
+Además de subcomandos y flags, completa los nombres de tus chops
+(`chop run <TAB>`), los números de item de `rm-item` y `run --item` (con el
+comando como descripción), los colores de `new --color` y los valores de
+`ls --sort`.
 
 ## Desarrollo
 

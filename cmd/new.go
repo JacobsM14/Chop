@@ -1,12 +1,12 @@
 package cmd
 
 import (
-	"chop/internal/render"
-	"chop/internal/store"
 	"errors"
 	"fmt"
 	"strings"
 
+	"github.com/JacobsM14/chop/internal/render"
+	"github.com/JacobsM14/chop/internal/store"
 	"github.com/charmbracelet/huh"
 	"github.com/spf13/cobra"
 )
@@ -20,6 +20,7 @@ var (
 func init() {
 	newCmd.Flags().StringVar(&newColor, "color", "", "color principal")
 	newCmd.Flags().BoolVar(&newOrdered, "ordered", false, "lista numerada")
+	cobra.CheckErr(newCmd.RegisterFlagCompletionFunc("color", cobra.FixedCompletions(render.Names(), cobra.ShellCompDirectiveNoFileComp)))
 	rootCmd.AddCommand(newCmd)
 }
 
@@ -27,6 +28,8 @@ var newCmd = &cobra.Command{
 	Use:   "new <name>",
 	Short: "Create a new Chop",
 	Args:  cobra.ExactArgs(1),
+	// The name is new, so there is nothing to complete.
+	ValidArgsFunction: cobra.NoFileCompletions,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		name := args[0]
 

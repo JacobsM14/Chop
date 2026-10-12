@@ -5,9 +5,8 @@ import (
 	"fmt"
 	"strconv"
 
-	"chop/internal/render"
-	"chop/internal/store"
-
+	"github.com/JacobsM14/chop/internal/render"
+	"github.com/JacobsM14/chop/internal/store"
 	"github.com/charmbracelet/huh"
 	"github.com/spf13/cobra"
 )
@@ -21,6 +20,12 @@ var rmItemCmd = &cobra.Command{
 	Short: "Remove an item from a Chop",
 	Long:  "Remove an item from a Chop. <n> is the item number as shown by `chop get`; if omitted, pick the item from a list.",
 	Args:  cobra.RangeArgs(1, 2),
+	ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]cobra.Completion, cobra.ShellCompDirective) {
+		if len(args) == 1 {
+			return completeItemNumbers(cmd, args, toComplete)
+		}
+		return completeChopNames(cmd, args, toComplete)
+	},
 	RunE: func(cmd *cobra.Command, args []string) error {
 		name := args[0]
 

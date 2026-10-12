@@ -5,8 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"chop/internal/store"
-
+	"github.com/JacobsM14/chop/internal/store"
 	"github.com/spf13/cobra"
 )
 

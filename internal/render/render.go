@@ -5,8 +5,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"chop/internal/store"
-
+	"github.com/JacobsM14/chop/internal/store"
 	"github.com/charmbracelet/lipgloss"
 )
 
